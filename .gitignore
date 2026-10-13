@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+mysql-data/
+.DS_Store
+resume.txt
+k8s
+pytest.ini
+tests
+eks-manifests
+Jenkinsfile
+Makefile
+requirements-dev.txt
+Dockerfile-multistage
+docker-compose.yml
