@@ -1,0 +1,62 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_secure_password}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-default_db}
+      MYSQL_USER: ${MYSQL_USER:-admin}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-root}
+    ports:
+      - "3307:3306"
+    volumes:
+      # - /mnt/e/PRATIK/Coding/AWS-DevOps/Docker/DecoupledStack - two-tier-flask-app/volumes/mysql:/var/lib/mysql
+      - decoupled_mysql_data:/var/lib/mysql
+    networks:
+      - decoupled-net
+    restart: always
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "MYSQL_PWD=$$MYSQL_ROOT_PASSWORD mysqladmin ping -h 127.0.0.1 -u root",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  flask-app:
+    build:
+      context: .
+    container_name: flask-app-two-tier-backend
+    ports:
+      - "5000:5000"
+    environment:
+      MYSQL_HOST: mysql
+      # MYSQL_PORT: 3306
+      MYSQL_DB: ${MYSQL_DB:-default_db}
+      MYSQL_USER: ${MYSQL_USER:-admin}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-root}
+    networks:
+      - decoupled-net
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  decoupled_mysql_data:
+    external: true # Tells compose to use your pre-created volume directly
+
+networks:
+  decoupled-net:
+    driver: bridge
+    external: true #Tells compose: "This network already exists, don't create a new one!"
+

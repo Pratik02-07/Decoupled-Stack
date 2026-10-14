@@ -10,3 +10,5 @@ k8s
 eks-manifests
 Jenkinsfile
 *.md
+volumes/
+**/#innodb_redo

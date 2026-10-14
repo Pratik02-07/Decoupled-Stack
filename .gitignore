@@ -5,7 +5,7 @@ __pycache__/
 .env
 mysql-data/
 .DS_Store
-resume.txt
+changes.md
 k8s
 pytest.ini
 tests
@@ -14,4 +14,5 @@ Jenkinsfile
 Makefile
 requirements-dev.txt
 Dockerfile-multistage
-docker-compose.yml
+docker-compose.yml.backup
+volumes/mysql
