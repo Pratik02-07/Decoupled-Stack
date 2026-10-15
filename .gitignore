@@ -13,6 +13,4 @@ eks-manifests
 Jenkinsfile
 Makefile
 requirements-dev.txt
-Dockerfile-multistage
-docker-compose.yml.backup
 volumes/mysql
